@@ -31,10 +31,10 @@ const budgetOptions = [
 const communicationOptions = ["Email", "WhatsApp", "Phone Call"];
 
 const textFields = [
-  { label: "Full Name", type: "text" },
-  { label: "Email Address", type: "email" },
-  { label: "Phone Number", type: "tel" },
-  { label: "Company/Business Name", type: "text" },
+  { label: "Full Name", type: "text", required: true },
+  { label: "Email Address", type: "email", required: true },
+  { label: "Phone Number", type: "tel", required: true },
+  { label: "Company/Business Name", type: "text", required: true },
   { label: "Website", type: "url", placeholder: "Website (if you already have one)" },
 ];
 
@@ -81,34 +81,50 @@ function Section({ title, number, children }) {
   );
 }
 
-function Field({ label, type = "text", placeholder }) {
+function RequiredBadge() {
+  return (
+    <span className="rounded-full border border-white/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/55">
+      Required
+    </span>
+  );
+}
+
+function Field({ label, type = "text", placeholder, required = false }) {
   return (
     <label className="block">
-      <span className="mb-2 block text-sm font-medium text-white/70">{label}</span>
+      <span className="mb-2 flex items-center justify-between gap-3 text-sm font-medium text-white/70">
+        <span>{label}</span>
+        {required && <RequiredBadge />}
+      </span>
       <input
         type={type}
         className="block rounded-md border border-white/15 bg-black px-4 py-3 text-white transition placeholder:text-white/35 focus:border-white/70 focus:bg-black"
         placeholder={placeholder || label}
         name={slugify(label)}
+        required={required}
       />
     </label>
   );
 }
 
-function TextAreaField({ label }) {
+function TextAreaField({ label, required = false }) {
   return (
     <label className="block">
-      <span className="mb-2 block text-sm font-medium text-white/70">{label}</span>
+      <span className="mb-2 flex items-center justify-between gap-3 text-sm font-medium text-white/70">
+        <span>{label}</span>
+        {required && <RequiredBadge />}
+      </span>
       <textarea
         className="block min-h-28 w-full resize-y rounded-md border border-white/15 bg-black px-4 py-3 text-white transition placeholder:text-white/35 focus:border-white/70 focus:bg-black"
         placeholder={label}
         name={slugify(label)}
+        required={required}
       />
     </label>
   );
 }
 
-function ChoiceGroup({ legend, name, options, type = "radio" }) {
+function ChoiceGroup({ legend, name, options, type = "radio", required = false }) {
   const indicatorClass =
     type === "checkbox"
       ? "rounded border-white/35 peer-checked:border-white peer-checked:bg-white"
@@ -116,9 +132,14 @@ function ChoiceGroup({ legend, name, options, type = "radio" }) {
 
   return (
     <fieldset className="space-y-4">
-      <legend className="text-sm font-medium text-white/70">{legend}</legend>
+      <legend className="w-full">
+        <span className="flex items-center justify-between gap-3 text-sm font-medium text-white/70">
+          <span>{legend}</span>
+          {required && <RequiredBadge />}
+        </span>
+      </legend>
       <div className="grid gap-3 sm:grid-cols-2">
-        {options.map((option) => (
+        {options.map((option, index) => (
           <label
             key={option}
             className="group relative flex min-h-14 cursor-pointer items-center gap-3 rounded-md border border-white/15 bg-black px-4 py-3 text-white/75 transition hover:border-white/35 hover:bg-white/[0.06]"
@@ -128,6 +149,7 @@ function ChoiceGroup({ legend, name, options, type = "radio" }) {
               name={name}
               value={option}
               className="peer sr-only"
+              required={required && type === "radio" && index === 0}
             />
             <span className={`h-4 w-4 shrink-0 border transition ${indicatorClass}`}></span>
             <span className="text-sm leading-5 peer-checked:text-white">{option}</span>
@@ -176,9 +198,10 @@ function Form() {
             legend="What type of website do you need?"
             name="website-type"
             options={websiteTypes}
+            required
           />
           {projectQuestions.map((question) => (
-            <TextAreaField key={question} label={question} />
+            <TextAreaField key={question} label={question} required />
           ))}
         </Section>
 
@@ -212,12 +235,13 @@ function Form() {
 
         <Section title="Timeline & Budget" number="07">
           <div className="max-w-sm">
-            <Field label="What is your desired launch date?" type="date" />
+            <Field label="What is your desired launch date?" type="date" required />
           </div>
           <ChoiceGroup
             legend="What is your budget range?"
             name="budget-range"
             options={budgetOptions}
+            required
           />
         </Section>
 
@@ -228,11 +252,12 @@ function Form() {
             legend="Preferred communication method:"
             name="preferred-communication"
             options={communicationOptions}
+            required
           />
         </Section>
 
         <Section title="Bonus Question" number="09">
-          <TextAreaField label="What would make this project a success for you?" />
+          <TextAreaField label="What would make this project a success for you?" required />
         </Section>
 
         <button
