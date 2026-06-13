@@ -1,0 +1,12 @@
+.header-logo {
+  margin: 0;
+  font-family: "SF Pro Display", "SF Pro Icons", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
