@@ -30,6 +30,15 @@ const budgetOptions = [
 
 const communicationOptions = ["Email", "WhatsApp", "Phone Call"];
 
+/* NEW: Language options */
+const languageOptions = [
+  "English",
+  "French",
+  "Arabic",
+  "Spanish",
+  "Other",
+];
+
 const textFields = [
   { label: "Full Name", type: "text", required: true },
   { label: "Email Address", type: "email", required: true },
@@ -185,6 +194,7 @@ function Form() {
           </p>
         </div>
 
+        {/* 01 */}
         <Section title="Contact" number="01">
           <div className="grid gap-5 sm:grid-cols-2">
             {textFields.map((field) => (
@@ -193,6 +203,7 @@ function Form() {
           </div>
         </Section>
 
+        {/* 02 */}
         <Section title="Project Details" number="02">
           <ChoiceGroup
             legend="What type of website do you need?"
@@ -200,23 +211,35 @@ function Form() {
             options={websiteTypes}
             required
           />
+
+          {/* NEW LANGUAGE QUESTION */}
+          <ChoiceGroup
+            legend="What language(s) should the website support?"
+            name="website-language[]"
+            options={languageOptions}
+            type="checkbox"
+          />
+
           {projectQuestions.map((question) => (
             <TextAreaField key={question} label={question} required />
           ))}
         </Section>
 
+        {/* 03 */}
         <Section title="Design Preferences" number="03">
           {designQuestions.map((question) => (
             <TextAreaField key={question} label={question} />
           ))}
         </Section>
 
+        {/* 04 */}
         <Section title="Content" number="04">
           {contentQuestions.map((question) => (
             <TextAreaField key={question} label={question} />
           ))}
         </Section>
 
+        {/* 05 */}
         <Section title="Features" number="05">
           <ChoiceGroup
             legend="Which features do you need?"
@@ -227,12 +250,14 @@ function Form() {
           <TextAreaField label="Custom Features (Describe)" />
         </Section>
 
+        {/* 06 */}
         <Section title="Technical Requirements" number="06">
           {technicalQuestions.map((question) => (
             <TextAreaField key={question} label={question} />
           ))}
         </Section>
 
+        {/* 07 */}
         <Section title="Timeline & Budget" number="07">
           <div className="max-w-sm">
             <Field label="What is your desired launch date?" type="date" required />
@@ -245,6 +270,7 @@ function Form() {
           />
         </Section>
 
+        {/* 08 */}
         <Section title="Final Questions" number="08">
           <TextAreaField label="How did you hear about me?" />
           <TextAreaField label="Is there anything else you'd like me to know?" />
@@ -256,8 +282,12 @@ function Form() {
           />
         </Section>
 
+        {/* 09 */}
         <Section title="Bonus Question" number="09">
-          <TextAreaField label="What would make this project a success for you?" required />
+          <TextAreaField
+            label="What would make this project a success for you?"
+            required
+          />
         </Section>
 
         <button
